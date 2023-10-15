@@ -1,6 +1,18 @@
 import { Elysia } from "elysia";
 
-const app = new Elysia().get("/", () => "Hello Bun Dev REST-APIs")
+//defining plugin
+const plugin = new Elysia()
+.state('plugin-version',1)
+.get('/form-plugin', () => 'Hi')
+.get('/greet', () => 'Hello bun dev')
+
+
+//defining application
+const app = new Elysia()
+.get("/", () => "Hello Bun Dev REST-APIs")
+//registering plugin in application instance using the use method
+//you can use plugins to break your code into multiple components
+.use(plugin)
 .state({
   id: '1',
   email: "mofafa@gmail.com",
@@ -18,13 +30,15 @@ const app = new Elysia().get("/", () => "Hello Bun Dev REST-APIs")
   //     'dancing feet',
   //     'walking toes',
   //     "running knees"
-  //   ]
+  //   
   // }),
   // {
   //   headers: {'Content-Type': 'application/json'}}
   // )
   console.log(store)
   console.log(getDate())
+  //accessing state in plugin
+  console.log(store['plugin-version'])
   return {
     "tracks":[
     'dancing feet',
