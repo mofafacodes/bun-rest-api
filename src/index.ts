@@ -1,11 +1,5 @@
 import { Elysia } from "elysia";
-
-//defining plugin
-const plugin = new Elysia()
-.state('plugin-version',1)
-.get('/form-plugin', () => 'Hi')
-.get('/greet', () => 'Hello bun dev')
-
+import {plugin} from "./plugin";
 
 //defining application
 const app = new Elysia()
