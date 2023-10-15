@@ -1,5 +1,6 @@
-import { Elysia } from "elysia";
+import { Elysia, t} from "elysia";
 import {plugin} from "./plugin";
+import { signinDTO, responseDTO } from "./models";
 
 //defining application
 const app = new Elysia()
@@ -36,14 +37,49 @@ const app = new Elysia()
   return {
     "tracks":[
     'dancing feet',
-     'walking toes',
+    'walking toes',
     "running knees",
     "running knees"
     ]
   }
-})
-.listen(3000);
+});
 
 console.log(
   `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
 );
+
+
+//grouping multiple Routes
+//user routes
+app.group('/user', app => app
+.post('/sign-in', ({body}) => body,{
+  //adding validation
+body: signinDTO,
+response: responseDTO
+})
+.post('/sign-up', () => "sign up")
+.post('/profile', () => "craete profile")
+.post('/signup', () => "sign up")
+.get('/:id', ({params: id}) => {
+  return id},
+  {
+    //adding validation for params
+    params: t.Object({
+      id: t.Numeric()
+    })
+
+  }
+
+)
+);
+
+//nested routes and versioning
+//product routes
+app.group('/v1', app => app
+.get('/', () => "Version 1")
+.group('/products', app => app
+.post('/', () => "create products")
+.get('/:id', () => "get products by id")
+));
+
+app.listen(3000);
